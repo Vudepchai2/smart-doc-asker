@@ -1,46 +1,45 @@
-import { FileText, Sparkles } from 'lucide-react';
+
+import { Code2, Bot, Network } from 'lucide-react';
 
 export const DocumentationHeader = () => {
   return (
-    <div className="text-center space-y-6 mb-12">
-      {/* Logo/Icon */}
-      <div className="flex justify-center">
-        <div className="relative">
-          <div className="p-4 bg-gradient-primary rounded-2xl shadow-glow">
-            <FileText className="w-12 h-12 text-primary-foreground" />
-          </div>
-          <div className="absolute -top-1 -right-1 p-1 bg-gradient-primary rounded-full">
-            <Sparkles className="w-4 h-4 text-primary-foreground" />
-          </div>
+    <div className="text-center space-y-4 mb-8">
+      <div className="flex items-center justify-center gap-3">
+        <div className="p-3 bg-gradient-primary rounded-full">
+          <Code2 className="w-8 h-8 text-primary-foreground" />
+        </div>
+        <div className="flex items-center gap-2">
+          <Bot className="w-6 h-6 text-primary" />
+          <Network className="w-6 h-6 text-primary" />
         </div>
       </div>
-
-      {/* Title and Description */}
-      <div className="space-y-4">
-        <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
-          Documentation AI
+      
+      <div className="space-y-2">
+        <h1 className="text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+          Multi-Agent Coding Assistant
         </h1>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-          Upload your documents and ask intelligent questions. Get precise answers 
-          from your PDFs, docs, and text files with AI-powered document analysis.
+        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          Specialized AI agents for code analysis, documentation generation, and web research
         </p>
       </div>
-
-      {/* Features */}
-      <div className="flex flex-wrap justify-center gap-3 mt-8">
-        {[
-          "PDF Analysis",
-          "Document Q&A", 
-          "Multiple Formats",
-          "Instant Answers"
-        ].map((feature) => (
-          <span
-            key={feature}
-            className="px-3 py-1 text-xs font-medium bg-gradient-accent border border-border rounded-full text-foreground"
-          >
-            {feature}
-          </span>
-        ))}
+      
+      <div className="flex flex-wrap justify-center gap-4 text-sm text-muted-foreground">
+        <div className="flex items-center gap-1">
+          <span>📄</span>
+          <span>File Analysis</span>
+        </div>
+        <div className="flex items-center gap-1">
+          <span>🔍</span>
+          <span>Web Search</span>
+        </div>
+        <div className="flex items-center gap-1">
+          <span>📝</span>
+          <span>Docstring Generation</span>
+        </div>
+        <div className="flex items-center gap-1">
+          <span>🎯</span>
+          <span>Multi-Agent Orchestration</span>
+        </div>
       </div>
     </div>
   );

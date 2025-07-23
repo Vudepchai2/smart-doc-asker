@@ -1,3 +1,4 @@
+
 import { useState, useRef } from 'react';
 import { Send, Loader2, Plus, File, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -5,15 +6,17 @@ import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 
 interface ChatInputProps {
-  onSubmit: (message: string, files: File[]) => void;
+  onSubmit: (message: string, files: File[], selectedAgent?: string) => void;
   isLoading?: boolean;
   placeholder?: string;
+  selectedAgent?: string;
 }
 
 export const ChatInput = ({ 
   onSubmit, 
   isLoading = false, 
-  placeholder = "Ask a question about your documents..." 
+  placeholder = "Ask about your code, generate docstrings, or request analysis...",
+  selectedAgent
 }: ChatInputProps) => {
   const [message, setMessage] = useState('');
   const [files, setFiles] = useState<File[]>([]);
@@ -21,7 +24,7 @@ export const ChatInput = ({
 
   const handleSubmit = () => {
     if (message.trim() || files.length > 0) {
-      onSubmit(message.trim(), files);
+      onSubmit(message.trim(), files, selectedAgent);
       setMessage('');
       setFiles([]);
     }
@@ -37,8 +40,8 @@ export const ChatInput = ({
   const handleFiles = (newFiles: FileList | null) => {
     if (!newFiles) return;
     
-    const fileArray = Array.from(newFiles).slice(0, 5); // Max 5 files
-    setFiles(prev => [...prev, ...fileArray].slice(0, 5));
+    const fileArray = Array.from(newFiles).slice(0, 10); // Max 10 files for coding projects
+    setFiles(prev => [...prev, ...fileArray].slice(0, 10));
   };
 
   const removeFile = (index: number) => {
@@ -53,6 +56,22 @@ export const ChatInput = ({
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
+  const getFileIcon = (filename: string) => {
+    const ext = filename.split('.').pop()?.toLowerCase();
+    switch (ext) {
+      case 'py': return '🐍';
+      case 'js': case 'jsx': return '💛';
+      case 'ts': case 'tsx': return '🔷';
+      case 'java': return '☕';
+      case 'cpp': case 'c': return '⚡';
+      case 'html': return '🌐';
+      case 'css': return '🎨';
+      case 'json': return '📋';
+      case 'md': return '📝';
+      default: return '📄';
+    }
+  };
+
   const isDisabled = isLoading || (!message.trim() && files.length === 0);
 
   return (
@@ -60,14 +79,14 @@ export const ChatInput = ({
       {/* Attached Files Display */}
       {files.length > 0 && (
         <div className="space-y-2">
-          <div className="text-xs text-muted-foreground">Attached files:</div>
+          <div className="text-xs text-muted-foreground">Code files attached:</div>
           <div className="flex flex-wrap gap-2">
             {files.map((file, index) => (
               <div
                 key={index}
                 className="flex items-center gap-2 px-3 py-2 bg-card rounded-lg border border-border text-sm"
               >
-                <File className="w-4 h-4 text-primary" />
+                <span className="text-base">{getFileIcon(file.name)}</span>
                 <span className="text-foreground font-medium truncate max-w-[120px]">
                   {file.name}
                 </span>
@@ -109,7 +128,7 @@ export const ChatInput = ({
             ref={fileInputRef}
             type="file"
             multiple
-            accept=".pdf,.doc,.docx,.txt,.md"
+            accept=".py,.js,.jsx,.ts,.tsx,.java,.cpp,.c,.h,.html,.css,.json,.md,.txt,.yaml,.yml,.xml,.sql,.sh,.bat,.go,.rs,.php,.rb,.swift,.kt,.scala,.r,.m,.pl,.lua,.dart,.elm,.ex,.exs,.clj,.fs,.hs,.ml,.pas,.vb,.cs,.asp,.jsp,.erb,.vue,.svelte"
             onChange={(e) => handleFiles(e.target.files)}
             className="hidden"
           />
@@ -152,7 +171,7 @@ export const ChatInput = ({
           <span>
             Press Enter to send, Shift+Enter for new line
           </span>
-          <span>{message.length}/2000</span>
+          <span>{message.length}/4000</span>
         </div>
       </div>
     </div>
