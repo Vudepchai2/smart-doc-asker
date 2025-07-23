@@ -3,6 +3,7 @@ import { DocumentationHeader } from '@/components/DocumentationHeader';
 import { ChatInput } from '@/components/ChatInput';
 import { ResponseArea } from '@/components/ResponseArea';
 import { toast } from '@/hooks/use-toast';
+import { documentationAI } from '@/services/api';
 
 interface Message {
   id: string;
