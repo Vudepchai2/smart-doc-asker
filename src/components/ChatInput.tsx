@@ -1,8 +1,7 @@
-import { useState } from 'react';
-import { Send, Loader2 } from 'lucide-react';
+import { useState, useRef } from 'react';
+import { Send, Loader2, Plus, File, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { FileUpload } from './FileUpload';
 import { cn } from '@/lib/utils';
 
 interface ChatInputProps {
@@ -18,6 +17,7 @@ export const ChatInput = ({
 }: ChatInputProps) => {
   const [message, setMessage] = useState('');
   const [files, setFiles] = useState<File[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = () => {
     if (message.trim() || files.length > 0) {
@@ -34,16 +34,86 @@ export const ChatInput = ({
     }
   };
 
+  const handleFiles = (newFiles: FileList | null) => {
+    if (!newFiles) return;
+    
+    const fileArray = Array.from(newFiles).slice(0, 5); // Max 5 files
+    setFiles(prev => [...prev, ...fileArray].slice(0, 5));
+  };
+
+  const removeFile = (index: number) => {
+    setFiles(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const formatFileSize = (bytes: number) => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  };
+
   const isDisabled = isLoading || (!message.trim() && files.length === 0);
 
   return (
-    <div className="space-y-4">
-      {/* File Upload Section */}
-      <FileUpload onFilesChange={setFiles} />
+    <div className="space-y-3">
+      {/* Attached Files Display */}
+      {files.length > 0 && (
+        <div className="space-y-2">
+          <div className="text-xs text-muted-foreground">Attached files:</div>
+          <div className="flex flex-wrap gap-2">
+            {files.map((file, index) => (
+              <div
+                key={index}
+                className="flex items-center gap-2 px-3 py-2 bg-card rounded-lg border border-border text-sm"
+              >
+                <File className="w-4 h-4 text-primary" />
+                <span className="text-foreground font-medium truncate max-w-[120px]">
+                  {file.name}
+                </span>
+                <span className="text-xs text-muted-foreground">
+                  {formatFileSize(file.size)}
+                </span>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => removeFile(index)}
+                  className="h-auto p-1 text-muted-foreground hover:text-destructive"
+                >
+                  <X className="w-3 h-3" />
+                </Button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
       
       {/* Message Input Section */}
       <div className="relative">
-        <div className="flex space-x-3">
+        <div className="flex space-x-2">
+          {/* File Attachment Button */}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={isLoading}
+            className={cn(
+              "h-20 px-3 border-border hover:border-primary/50",
+              "transition-all duration-300"
+            )}
+          >
+            <Plus className="w-5 h-5" />
+          </Button>
+          
+          <input
+            ref={fileInputRef}
+            type="file"
+            multiple
+            accept=".pdf,.doc,.docx,.txt,.md"
+            onChange={(e) => handleFiles(e.target.files)}
+            className="hidden"
+          />
+          
           <div className="flex-1 relative">
             <Textarea
               value={message}
@@ -77,10 +147,9 @@ export const ChatInput = ({
           </Button>
         </div>
         
-        {/* Character count / help text */}
+        {/* Help text */}
         <div className="flex justify-between items-center mt-2 text-xs text-muted-foreground">
           <span>
-            {files.length > 0 && `${files.length} file(s) attached • `}
             Press Enter to send, Shift+Enter for new line
           </span>
           <span>{message.length}/2000</span>
