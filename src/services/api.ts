@@ -1,73 +1,15 @@
 
-// Multi-agent API service for coding documentation AI
+// Multi-agent coding assistant API service - specialized for software development
 
-export interface AgentType {
-  id: string;
-  name: string;
-  description: string;
-  capabilities: string[];
-  icon: string;
-}
+// Re-export types from modular structure
+export type { CodingAgentType, ChatMessage, ChatResponse } from './agents/types';
+export { CODING_AGENTS, getAgentById, getAgentsBySpecialization } from './agents/registry';
 
-export interface ChatMessage {
-  message: string;
-  files?: File[];
-  selectedAgent?: string;
-}
-
-export interface ChatResponse {
-  response: string;
-  success: boolean;
-  error?: string;
-  agentUsed?: string;
-  metadata?: {
-    filesProcessed?: number;
-    webSearchResults?: number;
-    docstringsGenerated?: number;
-  };
-}
+import type { CodingAgentType, ChatResponse } from './agents/types';
+import { CODING_AGENTS } from './agents/registry';
 
 export class MultiAgentCodingAI {
   private baseUrl: string;
-  
-  // Available agents in the system
-  public static readonly AGENTS: AgentType[] = [
-    {
-      id: 'file-reader',
-      name: 'File Reader Agent',
-      description: 'Analyzes and understands code files, extracts structure and dependencies',
-      capabilities: ['Read code files', 'Parse syntax', 'Extract functions/classes', 'Analyze imports'],
-      icon: '📄'
-    },
-    {
-      id: 'web-search',
-      name: 'Web Search Agent',
-      description: 'Searches documentation, Stack Overflow, and coding resources',
-      capabilities: ['Search documentation', 'Find code examples', 'Check API references', 'Latest updates'],
-      icon: '🔍'
-    },
-    {
-      id: 'docstring-generator',
-      name: 'Docstring Generator Agent',
-      description: 'Generates comprehensive docstrings and code documentation',
-      capabilities: ['Generate docstrings', 'Add type hints', 'Create inline comments', 'API documentation'],
-      icon: '📝'
-    },
-    {
-      id: 'code-analyzer',
-      name: 'Code Analyzer Agent',
-      description: 'Analyzes code quality, suggests improvements, and identifies issues',
-      capabilities: ['Code review', 'Best practices', 'Performance analysis', 'Security checks'],
-      icon: '🔍'
-    },
-    {
-      id: 'orchestrator',
-      name: 'Orchestrator Agent',
-      description: 'Coordinates multiple agents to provide comprehensive solutions',
-      capabilities: ['Multi-agent coordination', 'Task delegation', 'Result synthesis', 'Workflow management'],
-      icon: '🎯'
-    }
-  ];
 
   constructor(baseUrl: string = '/api') {
     this.baseUrl = baseUrl;
@@ -239,8 +181,8 @@ export class MultiAgentCodingAI {
     }
   }
 
-  getAvailableAgents(): AgentType[] {
-    return MultiAgentCodingAI.AGENTS;
+  getAvailableAgents(): CodingAgentType[] {
+    return CODING_AGENTS;
   }
 }
 

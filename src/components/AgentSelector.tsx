@@ -4,10 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { AgentType } from '@/services/api';
+import { CodingAgentType } from '@/services/api';
 
 interface AgentSelectorProps {
-  agents: AgentType[];
+  agents: CodingAgentType[];
   selectedAgent: string;
   onAgentSelect: (agentId: string) => void;
 }
