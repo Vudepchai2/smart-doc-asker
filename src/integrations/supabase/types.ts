@@ -14,7 +14,83 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      workflow_executions: {
+        Row: {
+          completed_at: string | null
+          error_message: string | null
+          execution_log: string[] | null
+          id: string
+          input_files: Json | null
+          results: Json | null
+          started_at: string
+          status: string
+          user_id: string
+          workflow_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          error_message?: string | null
+          execution_log?: string[] | null
+          id?: string
+          input_files?: Json | null
+          results?: Json | null
+          started_at?: string
+          status: string
+          user_id: string
+          workflow_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          error_message?: string | null
+          execution_log?: string[] | null
+          id?: string
+          input_files?: Json | null
+          results?: Json | null
+          started_at?: string
+          status?: string
+          user_id?: string
+          workflow_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workflow_executions_workflow_id_fkey"
+            columns: ["workflow_id"]
+            isOneToOne: false
+            referencedRelation: "workflows"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      workflows: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          updated_at: string
+          user_id: string
+          workflow_data: Json
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          updated_at?: string
+          user_id: string
+          workflow_data: Json
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          updated_at?: string
+          user_id?: string
+          workflow_data?: Json
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
