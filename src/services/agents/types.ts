@@ -1,13 +1,45 @@
-// Core types for the multi-agent coding system
+// Core types for the modular coding documentation system
 
-export interface CodingAgentType {
+export interface CodingTool {
   id: string;
   name: string;
   description: string;
-  capabilities: string[];
-  supportedLanguages: string[];
   icon: string;
-  specialization: 'analysis' | 'documentation' | 'research' | 'coordination';
+  category: 'analysis' | 'documentation' | 'research' | 'evaluation';
+  inputs: ToolInput[];
+  outputs: ToolOutput[];
+}
+
+export interface ToolInput {
+  id: string;
+  name: string;
+  type: 'file' | 'text' | 'url' | 'code';
+  required: boolean;
+}
+
+export interface ToolOutput {
+  id: string;
+  name: string;
+  type: 'documentation' | 'analysis' | 'report' | 'code';
+}
+
+export interface WorkflowNode {
+  id: string;
+  type: 'tool' | 'input' | 'output';
+  position: { x: number; y: number };
+  data: {
+    toolId?: string;
+    label?: string;
+    config?: Record<string, any>;
+  };
+}
+
+export interface WorkflowConnection {
+  id: string;
+  source: string;
+  target: string;
+  sourceHandle?: string;
+  targetHandle?: string;
 }
 
 export interface ChatMessage {

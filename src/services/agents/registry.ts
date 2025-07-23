@@ -1,58 +1,73 @@
-// Agent registry for the multi-agent coding system
-import { CodingAgentType } from './types';
+// Tool registry for the modular coding documentation system
+import { CodingTool } from './types';
 
-export const CODING_AGENTS: CodingAgentType[] = [
+export const CODING_TOOLS: CodingTool[] = [
   {
-    id: 'file-reader',
+    id: 'file-analyzer',
     name: 'Code File Analyzer',
     description: 'Deep analysis of source code files, extracts structure, dependencies, and patterns',
-    capabilities: ['Parse AST', 'Extract functions/classes', 'Analyze imports', 'Detect patterns'],
-    supportedLanguages: ['Python', 'JavaScript', 'TypeScript', 'Java', 'C++', 'Go', 'Rust'],
-    specialization: 'analysis',
-    icon: '📄'
+    icon: '📄',
+    category: 'analysis',
+    inputs: [
+      { id: 'files', name: 'Source Files', type: 'file', required: true },
+      { id: 'language', name: 'Programming Language', type: 'text', required: false }
+    ],
+    outputs: [
+      { id: 'analysis', name: 'Code Analysis', type: 'analysis' },
+      { id: 'structure', name: 'Code Structure', type: 'report' }
+    ]
   },
   {
-    id: 'web-search',
-    name: 'Developer Research Agent',
-    description: 'Searches coding documentation, GitHub, Stack Overflow, and technical resources',
-    capabilities: ['API documentation search', 'Code examples', 'Best practices', 'Library research'],
-    supportedLanguages: ['All programming languages'],
-    specialization: 'research',
-    icon: '🔍'
+    id: 'web-researcher',
+    name: 'Documentation Researcher',
+    description: 'Searches coding documentation, APIs, and best practices from the web',
+    icon: '🔍',
+    category: 'research',
+    inputs: [
+      { id: 'query', name: 'Search Query', type: 'text', required: true },
+      { id: 'context', name: 'Code Context', type: 'code', required: false }
+    ],
+    outputs: [
+      { id: 'research', name: 'Research Results', type: 'report' },
+      { id: 'references', name: 'Documentation Links', type: 'report' }
+    ]
   },
   {
     id: 'docstring-generator',
     name: 'Documentation Generator',
-    description: 'Generates professional docstrings, type hints, and comprehensive code documentation',
-    capabilities: ['Generate docstrings', 'Type annotations', 'Inline comments', 'README creation'],
-    supportedLanguages: ['Python', 'JavaScript', 'TypeScript', 'Java', 'C#'],
-    specialization: 'documentation',
-    icon: '📝'
+    description: 'Generates comprehensive docstrings, comments, and API documentation',
+    icon: '📝',
+    category: 'documentation',
+    inputs: [
+      { id: 'code', name: 'Source Code', type: 'code', required: true },
+      { id: 'style', name: 'Documentation Style', type: 'text', required: false }
+    ],
+    outputs: [
+      { id: 'docstrings', name: 'Generated Docstrings', type: 'documentation' },
+      { id: 'api-docs', name: 'API Documentation', type: 'documentation' }
+    ]
   },
   {
-    id: 'code-analyzer',
-    name: 'Code Quality Auditor',
-    description: 'Comprehensive code review, security analysis, and performance optimization',
-    capabilities: ['Static analysis', 'Security scanning', 'Performance review', 'Code metrics'],
-    supportedLanguages: ['Python', 'JavaScript', 'TypeScript', 'Java', 'C++', 'Go'],
-    specialization: 'analysis',
-    icon: '🔍'
-  },
-  {
-    id: 'orchestrator',
-    name: 'Multi-Agent Coordinator',
-    description: 'Intelligently coordinates specialist agents for comprehensive code analysis',
-    capabilities: ['Agent coordination', 'Task planning', 'Result synthesis', 'Workflow optimization'],
-    supportedLanguages: ['All programming languages'],
-    specialization: 'coordination',
-    icon: '🎯'
+    id: 'quality-evaluator',
+    name: 'Code Quality Evaluator',
+    description: 'Evaluates code quality, security, and provides improvement suggestions',
+    icon: '🔍',
+    category: 'evaluation',
+    inputs: [
+      { id: 'code', name: 'Source Code', type: 'code', required: true },
+      { id: 'metrics', name: 'Quality Metrics', type: 'text', required: false }
+    ],
+    outputs: [
+      { id: 'quality-report', name: 'Quality Report', type: 'report' },
+      { id: 'suggestions', name: 'Improvement Suggestions', type: 'report' }
+    ]
   }
 ];
 
-export const getAgentById = (id: string): CodingAgentType | undefined => {
-  return CODING_AGENTS.find(agent => agent.id === id);
+export const getToolById = (id: string): CodingTool | undefined => {
+  return CODING_TOOLS.find(tool => tool.id === id);
 };
 
-export const getAgentsBySpecialization = (specialization: CodingAgentType['specialization']): CodingAgentType[] => {
-  return CODING_AGENTS.filter(agent => agent.specialization === specialization);
+export const getToolsByCategory = (category: CodingTool['category']): CodingTool[] => {
+  return CODING_TOOLS.filter(tool => tool.category === category);
 };

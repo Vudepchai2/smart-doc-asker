@@ -1,12 +1,12 @@
 
-// Multi-agent coding assistant API service - specialized for software development
+// Modular coding documentation API service
 
 // Re-export types from modular structure
-export type { CodingAgentType, ChatMessage, ChatResponse } from './agents/types';
-export { CODING_AGENTS, getAgentById, getAgentsBySpecialization } from './agents/registry';
+export type { CodingTool, ChatMessage, ChatResponse } from './agents/types';
+export { CODING_TOOLS, getToolById, getToolsByCategory } from './agents/registry';
 
-import type { CodingAgentType, ChatResponse } from './agents/types';
-import { CODING_AGENTS } from './agents/registry';
+import type { CodingTool, ChatResponse } from './agents/types';
+import { CODING_TOOLS } from './agents/registry';
 
 export class MultiAgentCodingAI {
   private baseUrl: string;
@@ -181,8 +181,8 @@ export class MultiAgentCodingAI {
     }
   }
 
-  getAvailableAgents(): CodingAgentType[] {
-    return CODING_AGENTS;
+  getAvailableTools(): CodingTool[] {
+    return CODING_TOOLS;
   }
 }
 

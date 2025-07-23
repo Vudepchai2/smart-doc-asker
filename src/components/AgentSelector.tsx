@@ -4,23 +4,23 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { CodingAgentType } from '@/services/api';
+import { CodingTool } from '@/services/api';
 
-interface AgentSelectorProps {
-  agents: CodingAgentType[];
-  selectedAgent: string;
-  onAgentSelect: (agentId: string) => void;
+interface ToolSelectorProps {
+  tools: CodingTool[];
+  selectedTool: string;
+  onToolSelect: (toolId: string) => void;
 }
 
-export const AgentSelector = ({ agents, selectedAgent, onAgentSelect }: AgentSelectorProps) => {
+export const AgentSelector = ({ tools, selectedTool, onToolSelect }: ToolSelectorProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const currentAgent = agents.find(agent => agent.id === selectedAgent);
+  const currentTool = tools.find(tool => tool.id === selectedTool);
 
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-medium text-foreground">Select Agent</h3>
+        <h3 className="text-sm font-medium text-foreground">Select Tool</h3>
         <Button
           variant="ghost"
           size="sm"
@@ -31,59 +31,54 @@ export const AgentSelector = ({ agents, selectedAgent, onAgentSelect }: AgentSel
         </Button>
       </div>
 
-      {/* Current Agent Display */}
-      {currentAgent && (
+      {/* Current Tool Display */}
+      {currentTool && (
         <Card className="p-3 bg-gradient-accent border-primary/20">
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-lg">{currentAgent.icon}</span>
-            <span className="text-sm font-medium text-foreground">{currentAgent.name}</span>
+            <span className="text-lg">{currentTool.icon}</span>
+            <span className="text-sm font-medium text-foreground">{currentTool.name}</span>
           </div>
-          <p className="text-xs text-muted-foreground mb-2">{currentAgent.description}</p>
+          <p className="text-xs text-muted-foreground mb-2">{currentTool.description}</p>
           <div className="flex flex-wrap gap-1">
-            {currentAgent.capabilities.slice(0, 2).map((capability, index) => (
-              <Badge key={index} variant="secondary" className="text-xs">
-                {capability}
-              </Badge>
-            ))}
-            {currentAgent.capabilities.length > 2 && (
-              <Badge variant="outline" className="text-xs">
-                +{currentAgent.capabilities.length - 2} more
-              </Badge>
-            )}
+            <Badge variant="secondary" className="text-xs">
+              {currentTool.category}
+            </Badge>
+            <Badge variant="outline" className="text-xs">
+              {currentTool.inputs.length} inputs
+            </Badge>
+            <Badge variant="outline" className="text-xs">
+              {currentTool.outputs.length} outputs
+            </Badge>
           </div>
         </Card>
       )}
 
-      {/* Agent Grid */}
+      {/* Tool Grid */}
       {isExpanded && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {agents.map((agent) => (
+          {tools.map((tool) => (
             <Card
-              key={agent.id}
+              key={tool.id}
               className={cn(
                 "p-3 cursor-pointer transition-all duration-200 hover:shadow-md",
-                agent.id === selectedAgent
+                tool.id === selectedTool
                   ? "bg-gradient-accent border-primary/50"
                   : "bg-card hover:bg-gradient-accent/50"
               )}
-              onClick={() => onAgentSelect(agent.id)}
+              onClick={() => onToolSelect(tool.id)}
             >
               <div className="flex items-center gap-2 mb-2">
-                <span className="text-lg">{agent.icon}</span>
-                <span className="text-sm font-medium text-foreground">{agent.name}</span>
+                <span className="text-lg">{tool.icon}</span>
+                <span className="text-sm font-medium text-foreground">{tool.name}</span>
               </div>
-              <p className="text-xs text-muted-foreground mb-2">{agent.description}</p>
+              <p className="text-xs text-muted-foreground mb-2">{tool.description}</p>
               <div className="flex flex-wrap gap-1">
-                {agent.capabilities.slice(0, 2).map((capability, index) => (
-                  <Badge key={index} variant="secondary" className="text-xs">
-                    {capability}
-                  </Badge>
-                ))}
-                {agent.capabilities.length > 2 && (
-                  <Badge variant="outline" className="text-xs">
-                    +{agent.capabilities.length - 2}
-                  </Badge>
-                )}
+                <Badge variant="secondary" className="text-xs">
+                  {tool.category}
+                </Badge>
+                <Badge variant="outline" className="text-xs">
+                  {tool.inputs.length}I / {tool.outputs.length}O
+                </Badge>
               </div>
             </Card>
           ))}
