@@ -1,6 +1,7 @@
 from langgraph import StateGraph, END
 from typing import TypedDict, List, Dict, Any
 import openai
+from langgraph_backend.ai_helpers import analyze_code_file, generate_docstrings, evaluate_code_quality
 
 class AgentState(TypedDict):
     nodes: List[Dict[str, Any]]
@@ -18,7 +19,7 @@ async def file_analyzer_agent(state: AgentState) -> AgentState:
     
     for file in files:
         # Analyze code structure, functions, classes, etc.
-        analysis = analyze_code_file(file["content"])
+        analysis = await analyze_code_file(file["content"])
         results[file["name"]] = analysis
     
     state["results"]["file_analysis"] = results
@@ -28,9 +29,8 @@ async def file_analyzer_agent(state: AgentState) -> AgentState:
 async def web_research_agent(state: AgentState) -> AgentState:
     """Searches for documentation and best practices"""
     # Implement web search for coding resources
-    search_results = await search_coding_documentation(state)
-    
-    state["results"]["web_research"] = search_results
+    # Placeholder for async web search
+    state["results"]["web_research"] = {"info": "Web research not implemented."}
     state["execution_log"].append("Web research completed")
     return state
 

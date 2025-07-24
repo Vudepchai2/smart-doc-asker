@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from typing import List, Dict, Any
 import json
+from langgraph_backend.agent_executor import run_doc_agent
+from langgraph_backend.tools import analyze_code, generate_docstrings, evaluate_quality
 
 app = FastAPI()
 
@@ -22,25 +24,23 @@ async def execute_workflow(
     inputFiles: str = Form(default="[]")
 ):
     try:
-        # Parse the workflow data
         nodes_data = json.loads(nodes)
         edges_data = json.loads(edges)
         files_data = json.loads(inputFiles)
         
-        # Execute the workflow using LangGraph
-        results = await execute_langgraph_workflow(nodes_data, edges_data, files_data)
+        results = []
+        for file in files_data:
+            file_content = file["content"]
+            file_name = file["name"]
+            doc_result = await run_doc_agent(file_content, file_name)
+            results.append(doc_result.dict())
         
         return JSONResponse({
             "success": True,
             "results": results
         })
-        
     except Exception as e:
         return JSONResponse(
             status_code=500,
             content={"success": False, "error": str(e)}
         )
-
-async def execute_langgraph_workflow(nodes, edges, files):
-    # Your LangGraph implementation here
-    pass

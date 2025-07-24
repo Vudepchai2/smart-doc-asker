@@ -1,0 +1,11 @@
+langgraph
+fastapi
+uvicorn
+python-multipart
+openai
+anthropic
+langchain
+langchain-openai
+langchain-anthropic
+python-dotenv
+pydantic

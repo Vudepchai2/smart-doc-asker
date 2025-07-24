@@ -1,6 +1,0 @@
-langgraph
-fastapi
-uvicorn
-python-multipart
-openai
-anthropic
